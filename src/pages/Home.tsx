@@ -188,9 +188,6 @@ const Home: React.FC = () => {
             Miner Alex is where mining meets fun, and rewards never stop growing
           </div>
 
-          <div className="max-w-[1015px]  max-h-[787px]">
-            <img src="./home/section5.png" alt="sec5img" className="w-auto h-auto" />
-          </div>
         </div>
         <div className="flex-1 flex flex-col justify-between items-center  px-8">
           <div className="font-bungeeinline font-normal text-[36px] text-center">
