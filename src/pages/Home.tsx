@@ -5,6 +5,8 @@ import PanelSetup from "../components/panel_setep";
 import Description from "../components/Home/section3/description";
 import DisplayAmount from "../components/Home/section4/displayAmount";
 import Sec4Description from "../components/Home/section4/sec4description";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useRef } from "react";
 const Home: React.FC = () => {
   // ------------section2 panelsetup setting-------
   const sec2tile = "ABOUT US"
@@ -43,33 +45,80 @@ const Home: React.FC = () => {
     "Mineralex (SL)'s ownership structure is uniquely designed to align the interests of local communities with the company's growth objectives.",
     "Mineralex prioritizes strong relationships with local communities , recognizing that responsible mining includes making a positive, sustainable impact on the regions it operates.",
   ];
+
+
+
+  // Refs for in-view detection
+  const sec4Ref = useRef(null);
+  const sec5Ref = useRef(null);
+  const sec6Ref = useRef(null);
+
+  // Scroll progress for Section 1 parallax
+  const { scrollYProgress } = useScroll();
+
+  // In-view hooks
+  const sec4InView = useInView(sec4Ref, { once: false, amount: 0.2 });
+  const sec5InView = useInView(sec5Ref, { once: false, amount: 0.2 });
+  const sec6InView = useInView(sec6Ref, { once: false, amount: 0.2 });
+
+  // Section 1: Slower parallax
+  const textY = useTransform(scrollYProgress, [0, 0.6], [0, 100]);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.8, duration: 2 },
+    },
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 2, type: "spring", bounce: 0.4 },
+    },
+  };
   return (
     <div className="w-full flex flex-col items-center justify-center bg-white box-border overflow-x-hidden">
-      {/* ------------section1----------- */}
-      <div className="contain h-auto xl:h-[100vh]  bg-[url('../public/home/section1.svg')]  bg-black/30  bg-blend-overlay  bg-cover bg-center w-full flex flex-col items-center justify-center gap-[33px] px-4 py-40 lg:py-60 transition-all duration-500">
-        <div className="flex flex-col items-center justify-center gap-[30px] text-center text-[#000000] text-4xl md:text-5xl   lg:text-[60px] font-bungeeinline font-normal leading-[38.34px] ">
-          <div className="text-white">BRIDGING MINING AND</div>
-          <div className="text-[#F8D835]"> BLOCKCHAIN TECHNOLOGY</div>
-        </div>
-        <div className="wrap-text text-white text-[20px] font-montserrat font-[500] text-center leading-[20px] mt-[8px] mb-[18px]">
-          Tokenizing Mineral Reserves for Transparency and Global Access.
-        </div>
+      {/* ------------section1------------- */}
+      <div className="contain h-[100vh]  bg-[url('../public/home/section1.svg')]  bg-black/30  bg-blend-overlay  bg-cover bg-center w-full px-4 py-40 lg:py-60 transition-all duration-500">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 2, type: "spring", bounce: 0.4 }}
+          style={{ y: textY }}
+          className="w-full flex flex-col items-center justify-center gap-[33px]">
+          <div className="flex flex-col items-center justify-center gap-[30px] text-center text-[#000000] text-4xl md:text-5xl   lg:text-[60px] font-bungeeinline font-normal leading-[38.34px] ">
+            <div className="text-white">BRIDGING MINING AND</div>
+            <div className="text-[#F8D835]"> BLOCKCHAIN TECHNOLOGY</div>
+          </div>
+          <div className="wrap-text text-white text-[22px] font-montserrat font-[500] text-center leading-[22px] mt-[8px] mb-[18px]">
+            Tokenizing Mineral Reserves for Transparency and Global Access.
+          </div>
 
-        <div className="flex flex-row gap-7 sm:gap-20">
+          <div className="flex flex-row gap-7 sm:gap-20">
+            <motion.button
+              whileHover={{ scale: 1.15, rotate: 2, transition: { duration: 0.5 } }}
+              whileTap={{ scale: 0.85 }}
+              className="min-w-[123px] min-h-[32.8px] bg-[#F8D835] font-montserrat text-black text-[14px] px-2 py-1 sm:text-[20px] md:text-[24px] lg:text-[29px] sm:px-10 md:px-15 lg:px-20 lg:py-10 rounded-3xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
+              <div className="flex flex-row gap-1 justify-center items-center font-bold">
+                LEARN MORE
+              </div>
+            </motion.button>
 
-          <button className="min-w-[123px] min-h-[32.8px] bg-[#F8D835] font-montserrat text-black text-[14px] px-2 py-1 sm:text-[20px] md:text-[24px] lg:text-[29px] sm:px-10 md:px-15 lg:px-20 lg:py-10 rounded-3xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
-            <div className="flex flex-row gap-1 justify-center items-center font-bold">
-              LEARN MORE
-            </div>
-          </button>
-
-          <button className="min-w-[123px] min-h-[32.8px] bg-transparent font-montserrat text-[#F8D835] text-[14px] px-2 py-1 sm:text-[20px] lg:text-[29px] sm:px-10 lg:px-20 lg:py-10 rounded-3xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
-            <div className="flex flex-row gap-1 justify-center items-center font-bold">
-              INVEST NOW
-              <FaArrowRight className="text-[#F8D835]" />
-            </div>
-          </button>
-        </div>
+            <motion.button
+              whileHover={{ scale: 1.15, rotate: 2, transition: { duration: 0.5 } }}
+              whileTap={{ scale: 0.85 }}
+              className="min-w-[123px] min-h-[32.8px] bg-transparent font-montserrat text-[#F8D835] text-[14px] px-2 py-1 sm:text-[20px] lg:text-[29px] sm:px-10 lg:px-20 lg:py-10 rounded-3xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
+              <div className="flex flex-row gap-1 justify-center items-center font-bold">
+                INVEST NOW
+                <FaArrowRight className="text-[#F8D835]" />
+              </div>
+            </motion.button>
+          </div>
+        </motion.div>
 
       </div>
 
@@ -135,7 +184,7 @@ const Home: React.FC = () => {
         <div className="contain w-full h-auto flex flex-col lg:flex-row items-center justify-around gap-6 lg:gap-20 px-4 lg:px-10 xl:pl-40 transition-all duration-500">
           <div className="w-full h-auto lg:w-2/5 flex flex-col justify-center items-center p-6 sm:p-10 gap-10">
             <div className="border-l-2 border-[#F8D835] px-1 md:px-2 text-center text-[#F8D835] font-normal text-[20px] sm:text-[24px] font-bungeeinline">
-              EXPLORATION HIGHLIGHTSF
+              EXPLORATION HIGHLIGHTS
             </div>
 
             <div className="w-full flex flex-row justify-between items-start gap-4">
@@ -170,19 +219,38 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full h-auto px-4">
+          <motion.div
+            ref={sec4Ref}
+            initial="hidden"
+            animate={sec4InView ? "visible" : "hidden"}
+            variants={itemVariants} className="w-full h-auto px-4">
             <img src="./home/section4_2.svg" alt="sec4_part2" className="w-full 2xl:w-4/5 h-auto float-right" />
-          </div>
+          </motion.div>
         </div>
-        <button className="min-w-[123px] min-h-[32.8px] bg-[#F8D835] font-montserrat text-black text-[14px] px-4 py-2 sm:text-[20px] md:text-[24px] lg:text-[29px] sm:px-10 md:px-15 lg:px-20 lg:py-6 rounded-3xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
+        <motion.button
+          whileHover={{
+            scale: 1.15,
+            rotate: [0, 2, -2, 0], // Rotate left and right
+            transition: { duration: 0.5, ease: "easeInOut" },
+          }}
+          whileTap={{ scale: 0.85 }}
+          className="min-w-[123px] min-h-[32.8px] bg-[#F8D835] font-montserrat text-black text-[14px] px-4 py-2 sm:text-[20px] md:text-[24px] lg:text-[29px] sm:px-10 md:px-15 lg:px-20 lg:py-6 rounded-3xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
           <div className="flex flex-row gap-1 justify-center items-center font-bold">
             LEARN MORE
           </div>
-        </button>
+        </motion.button>
       </div>
 
       {/* ----------------------section5----------- */}
-      <div className="w-full flex flex-col  lg:flex-row justify-center items-center p-4 lg:p-8 gap-6">
+      <motion.div
+        ref={sec5Ref}
+        initial="hidden"
+        animate={sec5InView ? "visible" : "hidden"}
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0, transition: { duration: 2.5, type: "spring", bounce: 0.4 } },
+        }}
+        className="w-full flex flex-col  lg:flex-row justify-center items-center p-4 lg:p-8 gap-6">
         <div className="w-full flex flex-col justify-center items-center gap-12">
           <div className="flex-1 font-normal text-[#F8D835] font-bungeeinline text-[22px] text-center lg:text-left uppercase flex-wrap ">
             Miner Alex is where mining meets fun, and rewards never stop growing
@@ -193,35 +261,83 @@ const Home: React.FC = () => {
           <div className="font-bungeeinline font-normal text-[36px] text-center">
             THE GAME
           </div>
-          <div className="w-[250px] h-[250px] sm:w-[350px] sm:h-[350px]">
+          <motion.div
+            whileHover={{ scale: 1.15, rotate: 5, transition: { duration: 0.5 } }}
+            className="w-[250px] h-[250px] sm:w-[350px] sm:h-[350px]"
+          >
             <img src="./home/sec5game.svg" alt="sec5game" className="w-auto h-auto" />
-          </div>
+          </motion.div>
           <div className="w-full font-normal text-black font-montserrat text-[22px] text-center flex-wrap">
-            An exciting adventure in the ultimate clicker game!
-            Dig for treasures, mine gold, and build your empire
+            An exciting adventure in the ultimate clicker game! Dig for treasures, mine gold, and build your empire
           </div>
-          <button className="min-w-[123px] min-h-[32.8px] bg-[#172B6B] font-montserrat text-white text-[20px] md:text-[24px] lg:text-[29px] px-6 py-2 md:px-10 my-8 rounded-2xl border-[2px] border-[#F8D835] focus:outline-none shadow-md  hover:bg-[#8a936d80] active:bg-[#babd8a] truncate">
-            <div className="flex flex-row gap-1 justify-center items-center font-bold">
-              Play now
-            </div>
-          </button>
-
+          <motion.button
+            whileHover={{ scale: 1.15, rotate: -2, transition: { duration: 0.5 } }}
+            whileTap={{ scale: 0.85 }}
+            className="min-w-[123px] min-h-[32.8px] bg-[#172B6B] font-montserrat text-white text-[20px] md:text-[24px] lg:text-[29px] px-6 py-2 md:px-10 my-8 rounded-2xl border-[2px] border-[#F8D835] focus:outline-none shadow-md hover:bg-[#8a936d80] active:bg-[#babd8a] font-bold"
+          >
+            Play now
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
       {/* ------------------------section6--------------------- */}
-      <div className="w-full flex flex-col gap-6 p-6">
+      <motion.div
+        ref={sec6Ref}
+        initial="hidden"
+        animate={sec6InView ? "visible" : "hidden"}
+        variants={{
+          hidden: { opacity: 0, y: 100 },
+          visible: { opacity: 1, y: 0, transition: { duration: 2.5, type: "spring", bounce: 0.4 } },
+        }}
+        className="w-full flex flex-col gap-6 p-6">
         <PanelSetup title={sec6title} subtitle={sec6subtitle} contexts={sec6contexts} />
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-500">
-          <img src="./home/sec6_1.png" alt="sec6_1" />
-          <img src="./home/sec6_2.png" alt="sec6_2" />
-          <img src="./home/sec6_3.png" alt="sec6_3" />
-          <img src="./home/sec6_4.png" alt="sec6_4" />
-          <img src="./home/sec6_5.png" alt="sec6_5" />
-          <img src="./home/sec6_6.png" alt="sec6_6" />
+
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <motion.img
+            src="./home/sec6_1.png"
+            alt="sec6_1"
+            initial={{ opacity: 0 }}
+            animate={sec6InView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1, delay: 0 }}
+          />
+          <motion.img
+            src="./home/sec6_2.png"
+            alt="sec6_2"
+            initial={{ opacity: 0 }}
+            animate={sec6InView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+          />
+          <motion.img
+            src="./home/sec6_3.png"
+            alt="sec6_3"
+            initial={{ opacity: 0 }}
+            animate={sec6InView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+          />
+          <motion.img
+            src="./home/sec6_4.png"
+            alt="sec6_4"
+            initial={{ opacity: 0 }}
+            animate={sec6InView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+          />
+          <motion.img
+            src="./home/sec6_5.png"
+            alt="sec6_5"
+            initial={{ opacity: 0 }}
+            animate={sec6InView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+          />
+          <motion.img
+            src="./home/sec6_6.png"
+            alt="sec6_6"
+            initial={{ opacity: 0 }}
+            animate={sec6InView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1, delay: 1 }}
+          />
         </div>
 
-      </div>
-    </div>
+    </motion.div>
+    </div >
   );
 };
 export default Home;

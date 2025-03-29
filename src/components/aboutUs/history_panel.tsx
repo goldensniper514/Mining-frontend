@@ -8,9 +8,9 @@ const History_Panel: React.FC<History_PanelProps> = ({ title, contexts }) => {
         <div className="contain flex flex-col justify-center items-start font-montserrat font-light text-center  break-all">
             <div className="font-bold text-[22px]">
                 {title}
-                </div>
+            </div>
             <div className="text-[20px]">
-{contexts}
+                {contexts}
             </div>
         </div>
     );
