@@ -16,7 +16,7 @@ const Home: React.FC = () => {
     "Mineralex Group aim to revolutionize mineral exploration and extraction through tokenized operations, enabling widespread investor participation and empowering local African communities.",
     "By combining blockchain’s transparency with the tangible backing of real-world assets, Mineralex aims to create secure, accessible, and profitable mining investment opportunities for global investors.",
   ];
-  // -----------------section3 setting----
+  // -----------------section3 setting------------
   const sec3Img1 = "./home/sec3_Img1.png";
   const sec3Img2 = "./home/sec3_Img2.png";
   const sec3title = "MINERALEX TOKEN STRATEGY";
